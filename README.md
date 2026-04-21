@@ -18,8 +18,8 @@ terraform plan
 terraform apply
 ```
 
-## Optional variables
+## Variables
 
 - `aws_region` (default: `us-east-1`)
 - `instance_type` (default: `t3.micro`)
-- `ssh_ingress_cidr` (default: `0.0.0.0/0`)
+- `ssh_ingress_cidr` (**required**) - CIDR allowed to SSH into the instance

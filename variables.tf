@@ -13,5 +13,4 @@ variable "instance_type" {
 variable "ssh_ingress_cidr" {
   description = "CIDR block allowed to SSH into the recipe webapp instance"
   type        = string
-  default     = "0.0.0.0/0"
 }

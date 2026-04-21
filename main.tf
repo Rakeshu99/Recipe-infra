@@ -71,7 +71,7 @@ resource "aws_instance" "recipe_webapp" {
       <body><h1>Recipe Webapp Infra is up</h1></body>
     </html>
     HTML
-    systemctl restart nginx
+    systemctl start nginx
   EOT
 
   tags = {
