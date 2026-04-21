@@ -24,6 +24,10 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
+locals {
+  selected_subnet_id = try(data.aws_subnets.default.ids[0], null)
+}
+
 resource "aws_security_group" "recipe_webapp" {
   name        = "recipe-webapp-sg"
   description = "Security group for Recipe webapp"
@@ -56,11 +60,12 @@ resource "aws_security_group" "recipe_webapp" {
 resource "aws_instance" "recipe_webapp" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = var.instance_type
-  subnet_id              = data.aws_subnets.default.ids[0]
+  subnet_id              = local.selected_subnet_id
   vpc_security_group_ids = [aws_security_group.recipe_webapp.id]
 
   user_data = <<-EOT
     #!/bin/bash
+    set -e
     dnf update -y
     dnf install -y nginx
     systemctl enable nginx
@@ -76,5 +81,12 @@ resource "aws_instance" "recipe_webapp" {
 
   tags = {
     Name = "recipe-webapp"
+  }
+
+  lifecycle {
+    precondition {
+      condition     = local.selected_subnet_id != null
+      error_message = "No subnet found in the default VPC. Create a subnet or update this Terraform configuration."
+    }
   }
 }

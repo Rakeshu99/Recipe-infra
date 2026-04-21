@@ -15,7 +15,7 @@ terraform init
 terraform fmt -check
 terraform validate
 terraform plan
-terraform apply
+terraform apply -var="ssh_ingress_cidr=YOUR_IP/32"
 ```
 
 ## Variables
